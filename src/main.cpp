@@ -4,6 +4,10 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
 
+
+using glm::mat4;
+using glm::vec3;
+
 GLuint vao_handle;
 float position_data[] = {
 	0.0f,0.5f,0.0f,
@@ -21,6 +25,7 @@ const char* vertex_shader =
 "layout(location = 0) in vec3 vertex_position;"//layout (=0) присваивается значение vertex_position нулю
 "layout(location = 1) in vec3 vertex_color;"   //(дальше что бы сделать вершинный шейдер и обращаться к 0)
 "out vec3 color;"
+"uniform mat4 RotationMatrix;"//UNIFORM переменная для поворота треугольника
 "void main() {"
 "   color = vertex_color;"
 "   gl_Position = vec4(vertex_position, 1.0);"
@@ -138,19 +143,41 @@ int main(void) {
 	//Закрепить индекс 1 за буффером с цветом
 	glBindBuffer(GL_ARRAY_BUFFER, position_buffer_handle);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
-	
+
 	/////////////////////////////////////////////////////////////
+	//Запросить число активных атрибутов
+	GLint num_Attribs;
+	glGetProgramInterfaceiv(program_handle, GL_PROGRAM_INPUT, GL_ACTIVE_RESOURCES, &num_Attribs);
+	//GL_PROGRAM_INPUT о том что запрашивается инфа о входных переменных
+	//GL_ACTIVE_RESOURCES о том что интересует число активных ресурсов
+	//num_Attribs куда сохраняется результат
+	//Обойти все атрибуты и для каждого запросить длинну имени, тип, индекс и вывести результаты
+	GLenum properties[] = { GL_NAME_LENGTH,GL_TYPE,GL_LOCATION };//тут то что нам требуется узнать
+	std::cout << "Active attributes: " << std::endl;
+	for (int i = 0; i < num_Attribs; i++) {
+		GLint results[3];
+		glGetProgramResourceiv(program_handle, GL_PROGRAM_INPUT, i, 3, properties, 3, nullptr, results);
+		GLint name_Buf_Size = results[0] + 1;
+		char* name = new char[name_Buf_Size];
+		glGetProgramResourceName(program_handle, GL_PROGRAM_INPUT, i, name_Buf_Size, nullptr, name);
+		std::cout << results[2] << " " << name << " " << results[1] << std::endl;
+		delete[]name;
+	}
 
-
-
-		glClearColor(0, 0, 1, 1);
+	glClearColor(0, 0, 1, 1);
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(window))
 	{
 		/* Render here */
+		glUseProgram(program_handle); //добавление программы в конвейр!
+
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		glUseProgram(program_handle); //добавление программы в конвейр!
+		mat4 rotationMatrix = glm::rotate(mat4(1.0f), 90.0f, vec3(0.0f, 0.0f, 1.0f));
+
+		GLuint location = glGetUniformLocation(program_handle, "RotationMatrix");
+		//if (location >= 0)
+			glUniformMatrix4fv(location, 1, GL_FALSE, &rotationMatrix[0][0]);
 
 		glBindVertexArray(vao_handle);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
