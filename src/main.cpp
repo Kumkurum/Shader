@@ -22,10 +22,10 @@ float color_data[] = {
 
 const char* vertex_shader =
 "#version 460\n"
-"layout(location = 0) in vec3 vertex_position;"//layout (=0) присваивается значение vertex_position нулю
-"layout(location = 1) in vec3 vertex_color;"   //(дальше что бы сделать вершинный шейдер и обращаться к 0)
+"layout(location = 0) in vec3 vertex_position;"//layout (=0) РїСЂРёСЃРІР°РёРІР°РµС‚СЃСЏ Р·РЅР°С‡РµРЅРёРµ vertex_position РЅСѓР»СЋ
+"layout(location = 1) in vec3 vertex_color;"   //(РґР°Р»СЊС€Рµ С‡С‚Рѕ Р±С‹ СЃРґРµР»Р°С‚СЊ РІРµСЂС€РёРЅРЅС‹Р№ С€РµР№РґРµСЂ Рё РѕР±СЂР°С‰Р°С‚СЊСЃСЏ Рє 0)
 "out vec3 color;"
-"uniform mat4 RotationMatrix;"//UNIFORM переменная для поворота треугольника
+"uniform mat4 RotationMatrix;"//UNIFORM РїРµСЂРµРјРµРЅРЅР°СЏ РґР»СЏ РїРѕРІРѕСЂРѕС‚Р° С‚СЂРµСѓРіРѕР»СЊРЅРёРєР°
 "void main() {"
 "   color = vertex_color;"
 "   gl_Position = vec4(vertex_position, 1.0);"
@@ -50,7 +50,7 @@ int main(void) {
 	}
 
 	/* Create a windowed mode window and its OpenGL context */
-	window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);///////////// создание окна (пустого)
+	window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);///////////// СЃРѕР·РґР°РЅРёРµ РѕРєРЅР° (РїСѓСЃС‚РѕРіРѕ)
 	if (!window) {
 		std::cout << "glfwCreateWindow falled!" << std::endl;
 		glfwTerminate();
@@ -65,7 +65,7 @@ int main(void) {
 		std::cout << "Error!" << std::endl;
 		return -1;
 	}
-	///////////////////////Инфа про рендеры и версии//////////////////////////////
+	///////////////////////РРЅС„Р° РїСЂРѕ СЂРµРЅРґРµСЂС‹ Рё РІРµСЂСЃРёРё//////////////////////////////
 
 	const GLubyte* renderer = glGetString(GL_RENDERER);
 	const GLubyte* vendor = glGetString(GL_VENDOR);
@@ -84,75 +84,75 @@ int main(void) {
 
 	///////////////////////////////////////////////////////////
 
-	///////////////////////////////////////////////////////////создать объект шейдера 
-	GLuint vs = glCreateShader(GL_VERTEX_SHADER);//вершинный шейдер            vs -дискриптор шейдера
+	///////////////////////////////////////////////////////////СЃРѕР·РґР°С‚СЊ РѕР±СЉРµРєС‚ С€РµР№РґРµСЂР° 
+	GLuint vs = glCreateShader(GL_VERTEX_SHADER);//РІРµСЂС€РёРЅРЅС‹Р№ С€РµР№РґРµСЂ            vs -РґРёСЃРєСЂРёРїС‚РѕСЂ С€РµР№РґРµСЂР°
 	if (0 == vs) {
 		std::cout << "Error creating vertex shader" << std::endl;
 		return -1;
 	}
 	glShaderSource(vs, 1, &vertex_shader, nullptr);
-	glCompileShader(vs);///////////////////////////////////////компиляция шейдера
+	glCompileShader(vs);///////////////////////////////////////РєРѕРјРїРёР»СЏС†РёСЏ С€РµР№РґРµСЂР°
 	GLint result;
-	glGetShaderiv(vs, GL_COMPILE_STATUS, &result);////////// получение атрибутов объектов шейдеров
+	glGetShaderiv(vs, GL_COMPILE_STATUS, &result);////////// РїРѕР»СѓС‡РµРЅРёРµ Р°С‚СЂРёР±СѓС‚РѕРІ РѕР±СЉРµРєС‚РѕРІ С€РµР№РґРµСЂРѕРІ
 	if (GL_FALSE == result) {
 		std::cout << "Vertex shader compile failed! " << std::endl;
 		return -1;
 	}
-	//////////////////////////////////фрагментный шейдер такой же как и вершинный 
+	//////////////////////////////////С„СЂР°РіРјРµРЅС‚РЅС‹Р№ С€РµР№РґРµСЂ С‚Р°РєРѕР№ Р¶Рµ РєР°Рє Рё РІРµСЂС€РёРЅРЅС‹Р№ 
 	GLuint fs = glCreateShader(GL_FRAGMENT_SHADER);
 	glShaderSource(fs, 1, &fragment_shader, nullptr);
 	glCompileShader(fs);
 	////////////////////////////////
 
-	GLuint program_handle = glCreateProgram();///////создать объект программы
-	glAttachShader(program_handle, vs);///// подключить к объекту программы
+	GLuint program_handle = glCreateProgram();///////СЃРѕР·РґР°С‚СЊ РѕР±СЉРµРєС‚ РїСЂРѕРіСЂР°РјРјС‹
+	glAttachShader(program_handle, vs);///// РїРѕРґРєР»СЋС‡РёС‚СЊ Рє РѕР±СЉРµРєС‚Сѓ РїСЂРѕРіСЂР°РјРјС‹
 	glAttachShader(program_handle, fs);
-	glLinkProgram(program_handle);/////скомпоновать программу и если всё оккей добавить в конвейр (while(!window)) glUseProgram
+	glLinkProgram(program_handle);/////СЃРєРѕРјРїРѕРЅРѕРІР°С‚СЊ РїСЂРѕРіСЂР°РјРјСѓ Рё РµСЃР»Рё РІСЃС‘ РѕРєРєРµР№ РґРѕР±Р°РІРёС‚СЊ РІ РєРѕРЅРІРµР№СЂ (while(!window)) glUseProgram
 
 	/////////////////////////////////////////////////////
-	//создать и заполнить буферные объекты
+	//СЃРѕР·РґР°С‚СЊ Рё Р·Р°РїРѕР»РЅРёС‚СЊ Р±СѓС„РµСЂРЅС‹Рµ РѕР±СЉРµРєС‚С‹
 	GLuint vbo_handles[2];
-	glGenBuffers(2, vbo_handles);//создаются сразу 2 буферных объекта
+	glGenBuffers(2, vbo_handles);//СЃРѕР·РґР°СЋС‚СЃСЏ СЃСЂР°Р·Сѓ 2 Р±СѓС„РµСЂРЅС‹С… РѕР±СЉРµРєС‚Р°
 	GLuint position_buffer_handle = vbo_handles[0];
 	GLuint color_buffer_handle = vbo_handles[1];
-	//заполнить буфер кадров
-	glBindBuffer(GL_ARRAY_BUFFER, position_buffer_handle);//связывание буферного объекта с точкой привязки GL_ARRAY_BUFFER(данные -точки)
-	glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(float), position_data, GL_STATIC_DRAW);//после привязки можно заполнить
-	//заполнить буфер цветов
+	//Р·Р°РїРѕР»РЅРёС‚СЊ Р±СѓС„РµСЂ РєР°РґСЂРѕРІ
+	glBindBuffer(GL_ARRAY_BUFFER, position_buffer_handle);//СЃРІСЏР·С‹РІР°РЅРёРµ Р±СѓС„РµСЂРЅРѕРіРѕ РѕР±СЉРµРєС‚Р° СЃ С‚РѕС‡РєРѕР№ РїСЂРёРІСЏР·РєРё GL_ARRAY_BUFFER(РґР°РЅРЅС‹Рµ -С‚РѕС‡РєРё)
+	glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(float), position_data, GL_STATIC_DRAW);//РїРѕСЃР»Рµ РїСЂРёРІСЏР·РєРё РјРѕР¶РЅРѕ Р·Р°РїРѕР»РЅРёС‚СЊ
+	//Р·Р°РїРѕР»РЅРёС‚СЊ Р±СѓС„РµСЂ С†РІРµС‚РѕРІ
 	glBindBuffer(GL_ARRAY_BUFFER, color_buffer_handle);
-	glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(float), color_data, GL_STATIC_DRAW);//GL_STATIC_DRAW для того что бы опенГЛ лучше организовал управление с данными
+	glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(float), color_data, GL_STATIC_DRAW);//GL_STATIC_DRAW РґР»СЏ С‚РѕРіРѕ С‡С‚Рѕ Р±С‹ РѕРїРµРЅР“Р› Р»СѓС‡С€Рµ РѕСЂРіР°РЅРёР·РѕРІР°Р» СѓРїСЂР°РІР»РµРЅРёРµ СЃ РґР°РЅРЅС‹РјРё
 
-	//////////////////// страница 39 пункт 3//////////////////
-	//после настройки буферных объектов их нужно объединить в обект массива вершин VAO
-	//создание обьекта массива вершин
+	//////////////////// СЃС‚СЂР°РЅРёС†Р° 39 РїСѓРЅРєС‚ 3//////////////////
+	//РїРѕСЃР»Рµ РЅР°СЃС‚СЂРѕР№РєРё Р±СѓС„РµСЂРЅС‹С… РѕР±СЉРµРєС‚РѕРІ РёС… РЅСѓР¶РЅРѕ РѕР±СЉРµРґРёРЅРёС‚СЊ РІ РѕР±РµРєС‚ РјР°СЃСЃРёРІР° РІРµСЂС€РёРЅ VAO
+	//СЃРѕР·РґР°РЅРёРµ РѕР±СЊРµРєС‚Р° РјР°СЃСЃРёРІР° РІРµСЂС€РёРЅ
 	glGenVertexArrays(1, &vao_handle);
-	glBindVertexArray(vao_handle);//сохранение дискриптора нового объекта в глобальной переменной vao_handle 
+	glBindVertexArray(vao_handle);//СЃРѕС…СЂР°РЅРµРЅРёРµ РґРёСЃРєСЂРёРїС‚РѕСЂР° РЅРѕРІРѕРіРѕ РѕР±СЉРµРєС‚Р° РІ РіР»РѕР±Р°Р»СЊРЅРѕР№ РїРµСЂРµРјРµРЅРЅРѕР№ vao_handle 
 
 	/////////////////////////////////////////
 
-	glEnableVertexAttribArray(0);//коры вершин
-	glEnableVertexAttribArray(1);//цвет вершин
+	glEnableVertexAttribArray(0);//РєРѕСЂС‹ РІРµСЂС€РёРЅ
+	glEnableVertexAttribArray(1);//С†РІРµС‚ РІРµСЂС€РёРЅ
 
 	/////////////////////////////////////////
 
-	//закрепить индекс 0 за буфером с координатами
+	//Р·Р°РєСЂРµРїРёС‚СЊ РёРЅРґРµРєСЃ 0 Р·Р° Р±СѓС„РµСЂРѕРј СЃ РєРѕРѕСЂРґРёРЅР°С‚Р°РјРё
 	glBindBuffer(GL_ARRAY_BUFFER, position_buffer_handle);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);//1 - индекс 2 - число компонентов на одну вершину 3 -тип данных 4 -необх нормализации 5 -шаг(смещение)
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);//1 - РёРЅРґРµРєСЃ 2 - С‡РёСЃР»Рѕ РєРѕРјРїРѕРЅРµРЅС‚РѕРІ РЅР° РѕРґРЅСѓ РІРµСЂС€РёРЅСѓ 3 -С‚РёРї РґР°РЅРЅС‹С… 4 -РЅРµРѕР±С… РЅРѕСЂРјР°Р»РёР·Р°С†РёРё 5 -С€Р°Рі(СЃРјРµС‰РµРЅРёРµ)
 
 	////////////////////////////////////////////////////////
-	//Закрепить индекс 1 за буффером с цветом
+	//Р—Р°РєСЂРµРїРёС‚СЊ РёРЅРґРµРєСЃ 1 Р·Р° Р±СѓС„С„РµСЂРѕРј СЃ С†РІРµС‚РѕРј
 	glBindBuffer(GL_ARRAY_BUFFER, position_buffer_handle);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
 
 	/////////////////////////////////////////////////////////////
-	//Запросить число активных атрибутов
+	//Р—Р°РїСЂРѕСЃРёС‚СЊ С‡РёСЃР»Рѕ Р°РєС‚РёРІРЅС‹С… Р°С‚СЂРёР±СѓС‚РѕРІ
 	GLint num_Attribs;
 	glGetProgramInterfaceiv(program_handle, GL_PROGRAM_INPUT, GL_ACTIVE_RESOURCES, &num_Attribs);
-	//GL_PROGRAM_INPUT о том что запрашивается инфа о входных переменных
-	//GL_ACTIVE_RESOURCES о том что интересует число активных ресурсов
-	//num_Attribs куда сохраняется результат
-	//Обойти все атрибуты и для каждого запросить длинну имени, тип, индекс и вывести результаты
-	GLenum properties[] = { GL_NAME_LENGTH,GL_TYPE,GL_LOCATION };//тут то что нам требуется узнать
+	//GL_PROGRAM_INPUT Рѕ С‚РѕРј С‡С‚Рѕ Р·Р°РїСЂР°С€РёРІР°РµС‚СЃСЏ РёРЅС„Р° Рѕ РІС…РѕРґРЅС‹С… РїРµСЂРµРјРµРЅРЅС‹С…
+	//GL_ACTIVE_RESOURCES Рѕ С‚РѕРј С‡С‚Рѕ РёРЅС‚РµСЂРµСЃСѓРµС‚ С‡РёСЃР»Рѕ Р°РєС‚РёРІРЅС‹С… СЂРµСЃСѓСЂСЃРѕРІ
+	//num_Attribs РєСѓРґР° СЃРѕС…СЂР°РЅСЏРµС‚СЃСЏ СЂРµР·СѓР»СЊС‚Р°С‚
+	//РћР±РѕР№С‚Рё РІСЃРµ Р°С‚СЂРёР±СѓС‚С‹ Рё РґР»СЏ РєР°Р¶РґРѕРіРѕ Р·Р°РїСЂРѕСЃРёС‚СЊ РґР»РёРЅРЅСѓ РёРјРµРЅРё, С‚РёРї, РёРЅРґРµРєСЃ Рё РІС‹РІРµСЃС‚Рё СЂРµР·СѓР»СЊС‚Р°С‚С‹
+	GLenum properties[] = { GL_NAME_LENGTH,GL_TYPE,GL_LOCATION };//С‚СѓС‚ С‚Рѕ С‡С‚Рѕ РЅР°Рј С‚СЂРµР±СѓРµС‚СЃСЏ СѓР·РЅР°С‚СЊ
 	std::cout << "Active attributes: " << std::endl;
 	for (int i = 0; i < num_Attribs; i++) {
 		GLint results[3];
@@ -169,7 +169,7 @@ int main(void) {
 	while (!glfwWindowShouldClose(window))
 	{
 		/* Render here */
-		glUseProgram(program_handle); //добавление программы в конвейр!
+		glUseProgram(program_handle); //РґРѕР±Р°РІР»РµРЅРёРµ РїСЂРѕРіСЂР°РјРјС‹ РІ РєРѕРЅРІРµР№СЂ!
 
 		glClear(GL_COLOR_BUFFER_BIT);
 
